@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" media="all">
+    <style>
+        html,
+        body {
+            height: 98%;
+            margin: 0;
+            padding: 0;
+        }
+        .wrap {
+            height: 100%;
+        }
+    </style>
+</head>
+<body style="height:100%;width:99%;">
+<div class="wrap" style="margin-left: 10px;">
+    <table class="layui-hide" id = "menu" lay-filter="menu"></table>
+    <script type="text/html" id="toolbar">
+        <button class="layui-btn" id = "open">全部展开</button>
+        <button class="layui-btn" id = "fold">全部折叠</button>
+        <div class="layui-inline" style="margin-left: 10px">
+            <input class="layui-input" id="edt-search" autocomplete="off" placeholder="查询内容">
+        </div>
+        <button class="layui-btn" id = "btn-search" data-type = "reload">查询</button>
+        <a class="layui-btn" id="insert" style="float: right" lay-event="insert">新增</a>
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-primary layui-btn-xs detail" lay-event="detail">查看</a>
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs del" lay-event="del">删除</a>
+    </script>
+</div>
+<script src="/static/layui/layui.js" charset="utf-8"></script>
+<script src="/static/js/jquery-3.3.1.min.js" charset="utf-8"></script>
+<script src="/static/js/jquery.cookie.js" charset="utf-8"></script>
+<script type="text/javascript">
+    layui.config({
+        base : 'static/css/'
+    }).extend({
+        treetable : 'treetable-lay/treetable',
+    });
+    layui.use(['treetable', 'table', 'layer'], function () {
+        var table = layui.table;
+        var layer = layui.layer;
+        var treetable = layui.treetable;
+
+        //渲染表格
+        var renderTable = function(){
+            layer.load(2);
+            treetable.render({
+                height:'full-30',
+                id:'menu',
+                treeColIndex: 2,	//树形图标显示在第几列
+                treeSpid: '0',		//最上级的父级id
+                treeIdName: 'id',	//id字段的名称
+                treePidName: 'pid',	//pid字段的名称，父级菜单id
+                treeDefaultClose: true,	//是否默认折叠
+                treeLinkage: false,		//父级展开时是否自动展开所有子级
+                elem: '#menu',	//表格id
+                url: 'menu_data.html',
+                toolbar: '#toolbar',
+                page: false,
+                cols: [[
+                    {field: 'id', title: 'id',width:'5%',align:'center',hide:true},
+                    {field: 'orderid', title: '序号',width:'5%',align:'center'},
+                    {field: 'caption', title: '菜单名称'},
+                    {field: 'lcon' , title: '图标'},
+                    {field: 'url' , title: '链接'},
+                    {field: 'order' , title: '排序号'},
+                    {field: 'remark' , title: '备注'},
+                    { title:'操作',align:'center',width:'15%', toolbar: '#barDemo'}
+                ]],
+                //数据渲染完的回调
+                done: function () {
+                    //关闭加载
+                    layer.closeAll('loading');
+                }
+            })
+        };
+        renderTable();
+
+        //表格工具栏事件监听
+        table.on('toolbar(menu)', function(obj){
+            switch(obj.event){
+                case 'insert':
+                    layer.open({
+                        type: 2 //Page层类型
+                        ,area: ['60%', '80%']
+                        ,title: '新增菜单'
+                        ,shade: 0.6 //遮罩透明度
+                        ,anim: 4 //0-6的动画形式，-1不开启
+                        ,content:['menu_insert.html/']
+                    });
+                    break;
+            };
+        });
+
+        //监听工具条
+        table.on('tool(menu)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'detail'){
+                layer.open({
+                    type: 2 //Page层类型
+                    ,area: ['60%', '80%']
+                    ,title: '菜单信息'
+                    ,shade: 0.6 //遮罩透明度
+                    ,anim: 4 //0-6的动画形式，-1不开启
+                    ,content:['menu_detail.html/'] + "?menu_id=" + data.id
+                });
+            }else if(obj.event === 'edit'){
+                layer.open({
+                    type: 2 //Page层类型
+                    ,area: ['60%', '80%']
+                    ,title: '编辑菜单信息'
+                    ,shade: 0.6 //遮罩透明度
+                    ,anim: 4 //0-6的动画形式，-1不开启
+                    ,content:['menu_edit.html/'] + "?menu_id=" + data.id
+                });
+            } else if(obj.event === 'del'){
+                layer.confirm('你确定要删除当前数据？', {
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    $.ajax({
+                        url: 'menu_del.html',
+                        type: 'POST',
+                        data:{'key': 'dele','base':data.id,'m_name':data.caption},
+                        headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                        success: function (base) {
+                            if (base == 'true'){
+                                layer.msg('删除菜单成功！', {icon: 1});
+                                setTimeout("window.location.reload();", 2000 )
+                            }else {
+                                layer.msg('当前菜单下有子菜单，不允许删除！', {icon: 2});
+                            }
+                        }
+                    })
+                });
+                return false;
+            }
+        });
+
+        $('body').on('click','#open', function(){
+            treetable.expandAll('#menu');
+        });
+        $('body').on('click','#fold', function(){
+            treetable.foldAll('#menu');
+        });
+
+        $('body').on('click','#btn-search', function(){
+            var keyword = $('#edt-search').val();
+            var searchCount = 0;
+            $('#menu').next('.treeTable').find('.layui-table-body tbody tr td').each(function () {
+                $(this).css('background-color', 'transparent');
+                var text = $(this).text();
+                if (keyword != '' && text.indexOf(keyword) >= 0) {
+                    $(this).css('background-color', 'rgba(23, 195, 57, 0.67)');
+                    treetable.expandAll('#menu');
+                    searchCount++;
+                }
+            });
+            if (keyword == '') {
+                // layer.msg("请输入搜索内容", {icon: 5});
+                renderTable();
+            } else if (searchCount == 0) {
+                layer.msg("没有找到相关数据!", {icon: 5});
+            }
+        });
+        document.onkeydown = function(){
+            if(window.event.keyCode == 13){
+                $('#btn-search').click()
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/admin/layui/css/layui.css" media="all">
+    <style>
+        .usg-div{
+            height: 100%;
+            border: 1px solid #dddddd;
+            overflow-y:scroll;
+            margin-left: 10px;
+            margin-right: 15px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="usg-div">
+    <table class="layui-hide" id="hardware" lay-filter="hardware" ></table>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">下线</a>
+    </script>
+</div>
+</body>
+</html>
+<script src="/static/admin/js/layui.js" charset="utf-8"></script>
+<script src="/static/js/jquery-3.3.1.min.js" charset="utf-8"></script>
+<script src="/static/js/jquery.cookie.js" charset="utf-8"></script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+
+        table.render({
+            elem: '#hardware'
+            ,url:'Hardware_data.html'
+            ,height: 'full-30'
+            ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            ,cols: [[
+                {field:'order', title:'序号',align:'center', width:80,fixed: 'left', unresize: true, sort: true,}
+                ,{field:'name', width:'50%', title: '设备名称'}
+                ,{field:'host', title: '信息信息', sort: true}
+            ]]
+            ,page: true
+        });
+    });
+</script>

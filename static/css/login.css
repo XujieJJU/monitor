@@ -1,0 +1,119 @@
+.d1{
+    width: 100%;
+    height: 100%;
+    background-image: url(../images/login.jpg);
+    background-repeat: no-repeat;
+    display: block;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    z-index: 2;
+    margin: 0;
+    position: absolute;
+    -moz-background-size:100% 100%;
+    background-size:100% 100%
+}
+.d2{
+    position:absolute;
+    z-index:2;
+    left:calc(50% - 240px);
+    top:30%;
+    height: 400px;
+    width: 480px;
+    border: 1px solid #17191869;
+    /*background-color:#30a59129;*/
+}
+.d3{
+    height: 30px;
+    width: 220px;
+    background-color:transparent;
+    border:1px solid #1037468f;
+    color: #02e1f4b8;
+    z-index: 2;
+}
+.d4{
+    height: 40px;
+    width: 280px;
+    background-color:#00b7ee;
+    border:1px solid #0f34428f;
+    color: white;
+    font-size: 16px;
+    z-index: 2;
+}
+.a1{
+    position:absolute;
+    z-index:2;
+    left:20%;
+    border:0px solid #103746;
+    height: 32px;
+    width: 38px;
+    text-align: center;
+    line-height: 30px;
+}
+.a2{
+    top:20%;
+    position: relative;
+}
+.a3{
+    top:40%;
+}
+
+.a4{
+    color:black;
+}
+
+/*.a4{*/
+    /*background-image: url(../../temp/image/image11.jpg);*/
+    /*!*opacity:0.7;*!*/
+    /*position: fixed;*/
+    /*left: 0;*/
+    /*right: 0;*/
+    /*top: 0;*/
+    /*bottom: 0;*/
+    /*background-color: darkgrey;*/
+    /*z-index: 3;*/
+/*}*/
+/*.a5{*/
+    /*display: none;*/
+/*}*/
+/*.a6{*/
+    /*background-color:#90a59f54;*/
+    /*!*background-color:transparent;*!*/
+    /*height: 600px;*/
+    /*width:600px;*/
+    /*margin-left: -300px;*/
+    /*margin-top: -400px;*/
+    /*border: solid 1px;*/
+    /*top: 50%;*/
+    /*left: 50%;*/
+    /*position: fixed;*/
+    /*!*background-color: white;*!*/
+/*}*/
+/*.b1{*/
+    /*!*border:1px solid #5c6644;*!*/
+    /*border:1px solid black;*/
+    /*z-index: 2;*/
+    /*left: 20%;*/
+    /*position: absolute;*/
+/*}*/
+/*.a7{*/
+    /*background-color:transparent;*/
+    /*height: 30px;*/
+    /*width: 340px;*/
+    /*margin-left: 50px;*/
+    /*font-size: 12px;*/
+/*}*/
+/*.a8{*/
+    /*background-color:transparent;*/
+    /*height: 30px;*/
+    /*width: 160px;*/
+    /*font-size: 16px;*/
+/*}*/
+/*.a9{*/
+    /*background-color:transparent;*/
+    /*height: 30px;*/
+    /*width: 55px;*/
+    /*margin-left: -25px;*/
+    /*font-size: 12px;*/
+    /*text-align: center;*/
+    /*line-height: 28px;*/
+/*}*/

@@ -1,0 +1,96 @@
+.hmap{
+    border: 1px solid #a7a4a4;
+    margin-top: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 20px;
+}
+
+.hmap_h{
+    border: 1px solid #a7a4a4;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 5px;
+    margin-bottom: 20px;
+}
+
+/*security.css*/
+
+.security{
+    margin-left: 10px;
+    margin-right: 20px;
+    height: 99%;
+    margin-top: 15px;
+}
+
+.security_from{
+    border-top: 1px solid #a7a4a4;
+    border-right: 1px solid #a7a4a4;
+    border-left: 1px solid #a7a4a4;
+    height: 15%;
+}
+.security_div{
+    margin-top: 3%;
+    margin-left: 5%;
+}
+.security_text{
+    border: 1px solid #a7a4a4;
+    height: 84%
+}
+
+.scan_div_one{
+    width: 80%;
+    height: 100%;
+    float:left;
+    border-right: 1px solid #a7a4a4
+}
+
+.scan_div_two{
+    width: 20%;
+    height: 100%;
+    float:right;
+}
+
+.scan_th_one{
+    text-align: center;
+    width: 50%;
+}
+
+.scan_th_two{
+    text-align: center;
+    width: 20%;
+}
+
+.scan_td{
+    text-align: center;
+}
+
+.posit_d1{
+    height: calc(100% - 22px);
+    border: 0px solid #e6e6e6;
+    margin-left: 10px;
+    margin-right: 17px;
+    margin-top: 10px;
+}
+
+.posit_d1_1{
+    height:100%;
+    border: 1px solid #e6e6e6;
+    width:20%;
+    float: left
+}
+
+.posit_d1_2{
+    height:100%;
+    border: 1px solid #e6e6e6;
+    width: calc(80% - 12px);
+    float: right
+}
+
+.posit_tree{
+    height: calc(100% - 22px);
+    width: calc(100% - 12px);
+    float: right;
+    margin-top: 10px;
+    overflow:auto;
+}

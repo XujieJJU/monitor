@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="/static/css/chart.css"/>
+</head>
+<body>
+<div class="wrap-container welcome-container">
+    <div class="panel-body hmap" id="Columnar" ></div>
+    <div class="panel-body hmap" id="transverse" ></div>
+    <div class="panel-body hmap" id="moun" ></div>
+    <div class="panel-body hmap" id="moun_number" ></div>
+    <div class="panel-body hmap" id="Diske_capacity" ></div>
+    <div class="panel-body hmap" id="Diske_number" ></div>
+    <div class="panel-body hmap" id="Diske_byte" ></div>
+    <div class="panel-body hmap" id="Diske_time" ></div>
+</div>
+<script src="/static/js/highcharts.js"></script>
+<script src="/static/js/jquery-3.3.1.min.js" charset="utf-8"></script>
+<script src="/static/js/jquery.cookie.js" charset="utf-8"></script>
+<script>
+    // CPU监控图
+    var dic_base;
+    var num = 5;
+    var chart1
+    var chart2
+    var chart3
+    var chart4
+    var chart5
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }
+    });
+    function activeLastPointToolip(chart) {
+        chart.series[0].points;
+    }
+
+    Highcharts.chart('Columnar', {
+        chart: {
+            type: 'spline',
+            marginRight: 10,
+            events: {
+                load: function () {
+                    var chart = this;
+                    activeLastPointToolip(chart);
+                    setInterval(function () {
+                        $.ajax({
+                            url:'/chart.html',
+                            type:'POST',
+                            data: {'key': 'CPU','time':num},
+                            headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                            success:function (base) {
+                                dic_base = $.parseJSON(base)
+                                var x = new Date(dic_base['time']).getTime();
+                                for (var i=0;i<chart.series.length;i++)
+                                {
+                                    chart.series[i].addPoint([x, dic_base['ev'][i]], true, true);
+                                }
+                                activeLastPointToolip(chart);
+                                //内存更新图表
+                                for (var i=0;i<chart1.series.length;i++)
+                                {
+                                    chart1.series[i].addPoint([x, dic_base['memory'][i]/1024/1024/1024], true, true);
+                                }
+                                activeLastPointToolip(chart1);
+                                // 网络读写字节更新图表
+                                for (var i=0;i<chart2.series.length;i++)
+                                {
+                                    chart2.series[i].addPoint([x, dic_base['byte'][i]/1024/1024], true, true);
+                                }
+                                activeLastPointToolip(chart2);
+                                // 磁盘读取次数更新图表
+                                for (var i=0;i<chart3.series.length;i++)
+                                {
+                                    chart3.series[i].addPoint([x, dic_base['disk_count'][i]/10000], true, true);
+                                }
+                                activeLastPointToolip(chart3);
+                                // 磁盘读取字节更新图表
+                                for (var i=0;i<chart4.series.length;i++)
+                                {
+                                    chart4.series[i].addPoint([x, (dic_base['disk_byte'][i])/1204/1024/1024], true, true);
+                                }
+                                activeLastPointToolip(chart4);
+                                // 磁盘读写时间更新图表
+                                for (var i=0;i<chart5.series.length;i++)
+                                {
+                                    chart5.series[i].addPoint([x, (dic_base['disk_time'][i])/1000], true, true);
+                                }
+                                activeLastPointToolip(chart5);
+
+                            }
+                        })
+                    }, num * 1000);
+                }
+            }
+        },
+        title: {
+            text: 'CPU使用率'
+        },
+        xAxis: {
+            type: 'datetime',
+            tickPixelInterval: 50,
+        },
+        yAxis: {
+            title: {
+                text: 'CPU使用率：%'
+            }
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.series.name + '</b><br/>' +
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                    Highcharts.numberFormat(this.y, 1) + '%';
+            }
+        },
+        series:{{date|safe}}
+    });
+</script>
+<script>
+    // 内存监控图
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }
+    });
+    function activeLastPointToolip(chart) {
+        chart.series[0].points;
+    }
+    Highcharts.chart('transverse', {
+        chart: {
+            type: 'areaspline',
+            marginRight: 10,
+            events: {
+                load: function () {
+                    chart1 = this;
+                    activeLastPointToolip(chart1);
+                }
+            }
+        },
+        title: {
+            text: '内存使用情况'
+        },
+        xAxis: {
+            type: 'datetime',
+            tickPixelInterval: 150
+        },
+        yAxis: {
+            title: {
+                text: '内存单位：GB'
+            }
+        },
+        tooltip: {
+            enabled: true,
+            formatter: function () {
+                return '<b>' + this.series.name + '</b><br/>' +
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                    Highcharts.numberFormat(this.y, 1) + ' GB';
+            }
+        },
+        legend: {
+            enabled: true
+        },
+        series:{{memory|safe}}
+    });
+</script>
+<script>
+    // 磁盘容量图
+    disk_base = []
+    series0 = []
+    series1 = []
+    function base() {
+        // 生成X轴数据
+        var bs = {{disk|safe}};
+        for (var d in bs) {
+            disk_base.push(d)
+            series0.push(bs[d][0]/1024/1024/1024)
+            series1.push(bs[d][1]/1024/1024/1024)
+        }
+    }
+    base()
+    Highcharts.chart('Diske_capacity', {
+        chart: {
+            type: 'column',
+        },
+        title: {
+            text: '磁盘容量'
+        },
+        xAxis: {
+            categories: disk_base,
+        },
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: '容量单位：GB'
+            }
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + Highcharts.numberFormat(this.y, 1) + ' GB' + '<br/>' +
+                    '总量: ' + Highcharts.numberFormat(this.point.stackTotal, 1) + ' GB';
+            }
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal'
+            }
+        },
+        series: [{
+            name: '空闲',
+            data: series0,
+        }, {
+            name: '已使用',
+            data: series1,
+        }]
+    });
+</script>
+<script>
+    // 网络读写字节情况
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }
+    });
+    function activeLastPointToolip(chart) {
+        chart.series[0].points;
+    }
+    Highcharts.chart('moun', {
+        chart: {
+            type: 'areaspline',
+            marginRight: 10,
+            events: {
+                load: function () {
+                    chart2 = this;
+                    activeLastPointToolip(chart2);
+                }
+            }
+        },
+        title: {
+            text: '数据包接收大小'
+        },
+        xAxis: {
+            type: 'datetime',
+            tickPixelInterval: 150
+        },
+        yAxis: {
+            title: {
+                text: '字节单位：GB'
+            }
+        },
+        tooltip: {
+            enabled: true,
+            formatter: function () {
+                return '<b>' + this.series.name + '</b><br/>' +
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                    Highcharts.numberFormat(this.y, 1) + ' GB';
+            }
+        },
+        legend: {
+            enabled: true
+        },
+        series:{{network|safe}}
+    });
+</script>
+<script>
+    // 网络读写次数情况
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }
+    });
+    function activeLastPointToolip(chart) {
+        chart.series[0].points;
+    }
+    var chart = Highcharts.chart('moun_number', {
+        chart: {
+            type: 'areaspline',
+            marginRight: 10,
+            events: {
+                load: function () {
+                    var chart = this;
+                    activeLastPointToolip(chart);
+                    setInterval(function () {
+                        if (dic_base){
+                            var x = new Date(dic_base['time']).getTime();
+                            for (var i=0;i<chart.series.length;i++)
+                            {
+                                chart.series[i].addPoint([x, (dic_base['other'][i])/10000], true, true);
+                            }
+                            activeLastPointToolip(chart);
+                        }
+                    },5 * 1000);
+                }
+            }
+        },
+        title: {
+            text: '网络收发次数'
+        },
+        xAxis: {
+            type: 'datetime',
+            tickPixelInterval: 150
+        },
+        yAxis: {
+            title: {
+                text: '次数单位：万次'
+            }
+        },
+        tooltip: {
+            enabled: true,
+            formatter: function () {
+                return '<b>' + this.series.name + '</b><br/>' +
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                    Highcharts.numberFormat(this.y, 1) + ' 万次';
+            }
+        },
+        legend: {
+            enabled: true
+        },
+        series:{{num_work|safe}}
+    });
+</script>
+<script>
+    // 磁盘读取次数情况
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }
+    });
+    function activeLastPointToolip(chart) {
+        chart.series[0].points;
+    }
+    var chart = Highcharts.chart('Diske_number', {
+        chart: {
+            type: 'spline',
+            marginRight: 10,
+            events: {
+                load: function () {
+                    chart3 = this;
+                    activeLastPointToolip(chart3);
+                }
+            }
+        },
+        title: {
+            text: '磁盘读写次数'
+        },
+        xAxis: {
+            type: 'datetime',
+            tickPixelInterval: 150
+        },
+        yAxis: {
+            title: {
+                text: '次数单位：万次'
+            }
+        },
+        tooltip: {
+            enabled: true,
+            formatter: function () {
+                return '<b>' + this.series.name + '</b><br/>' +
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                    Highcharts.numberFormat(this.y, 1) + ' 万次';
+            }
+        },
+        legend: {
+            enabled: true
+        },
+        series:{{disk_count|safe}}
+    });
+</script>
+<script>
+    // 磁盘读取字节情况
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }
+    });
+    function activeLastPointToolip(chart) {
+        chart.series[0].points;
+    }
+    var chart = Highcharts.chart('Diske_byte', {
+        chart: {
+            type: 'spline',
+            marginRight: 10,
+            events: {
+                load: function () {
+                    chart4 = this;
+                    activeLastPointToolip(chart4);
+                }
+            }
+        },
+        title: {
+            text: '磁盘读写字节'
+        },
+        xAxis: {
+            type: 'datetime',
+            tickPixelInterval: 150
+        },
+        yAxis: {
+            title: {
+                text: '字节单位：GB'
+            }
+        },
+        tooltip: {
+            enabled: true,
+            formatter: function () {
+                return '<b>' + this.series.name + '</b><br/>' +
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                    Highcharts.numberFormat(this.y, 1) + ' GB';
+            }
+        },
+        legend: {
+            enabled: true
+        },
+        series:{{disk_byte|safe}}
+    });
+</script>
+<script>
+    // 磁盘读写时间情况
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }
+    });
+    function activeLastPointToolip(chart) {
+        chart.series[0].points;
+    }
+    var chart = Highcharts.chart('Diske_time', {
+        chart: {
+            type: 'spline',
+            marginRight: 10,
+            events: {
+                load: function () {
+                    chart5 = this;
+                    activeLastPointToolip(chart5);
+                }
+            }
+        },
+        title: {
+            text: '磁盘读写时间'
+        },
+        xAxis: {
+            type: 'datetime',
+            tickPixelInterval: 150
+        },
+        yAxis: {
+            title: {
+                text: '时间单位：秒/S'
+            }
+        },
+        tooltip: {
+            enabled: true,
+            formatter: function () {
+                return '<b>' + this.series.name + '</b><br/>' +
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                    Highcharts.numberFormat(this.y, 1) + ' 秒';
+            }
+        },
+        legend: {
+            enabled: true
+        },
+        series:{{disk_time|safe}}
+    });
+</script>
+</body>
+</html>

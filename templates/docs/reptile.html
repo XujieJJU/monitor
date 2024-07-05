@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%;margin: 0">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+</head>
+<body>
+<div style="margin-right: 10px;margin-left: 10px">
+    <table class="layui-hide" id="Reptile" lay-filter="Reptile"></table>
+    <script type="text/html" id="toolbar">
+        <div class="layui-inline">
+            <input class="layui-input" id="input" autocomplete="off" placeholder="币种名称" value="">
+        </div>
+        <button class="layui-btn" id = "search" data-type = "reload">查询</button>
+        <a class="layui-btn" id="update" style="float: right" lay-event="update">更新</a>
+    </script>
+</div>
+
+<script src="/static/admin/js/layui.js" charset="utf-8"></script>
+<script src="/static/js/jquery-3.3.1.min.js" charset="utf-8"></script>
+<script src="/static/js/jquery.cookie.js" charset="utf-8"></script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+
+        //方法级渲染
+        table.render({
+            elem: '#Reptile'
+            ,url: '/reptile_base.html'
+            ,height: 'full-30'
+            ,toolbar: '#toolbar'
+            ,cols: [[
+                {checkbox: true, fixed: true, width:'5%',align:'center'}
+                ,{field:'initial', title: '初始币种', width:'20%',text: 'center', sort: true, fixed: true,align:'center'}
+                ,{field:'exchange_rate', title: '汇率', width:'15%',align:'center'}
+                ,{field:'target', title: '目标币种',width:'20%', sort: true,align:'center'}
+                ,{field:'abbreviation', title: '币种缩写',width:'15%',align:'center'}
+                ,{field:'remarks', title: '备注',align:'center'}
+            ]]
+            ,id: 'reptile'
+            ,page: true
+        });
+
+        //表格工具栏事件监听
+        table.on('toolbar(Reptile)', function(obj){
+            if(obj.event === 'update'){
+                var index = layer.load(0, {shade: [0.2, '#5B5B5B']});
+                $.ajax({
+                    url: 'reptile.html',
+                    type: 'POST',
+                    headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                    success: function (base) {
+                        if (base == 'true'){
+                            layer.msg('更新数据成功！', {icon: 1});
+                            setTimeout("window.location.reload();", 2000 )
+                        }else {
+                            layer.msg('更新数据失败，请联系管理员！', {icon: 2});
+                            setTimeout("window.location.reload();", 2000 )
+                        }
+                    }
+                })
+            }
+        });
+
+        var $ = layui.$, active = {
+            reload:function(){
+                var values =$("#input").val();
+                var index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+                table.reload('reptile',
+                    {page:
+                            {
+                                curr: 1 //重新从第 1 页开始
+                            }
+                        ,where: {keyword:values}//这里传参  向后台
+                    });
+                $("#input").attr("value", values);
+                layer.close(index);
+            }
+        };
+        $('body').on('click','#search', function(){
+            var type = 'reload';
+            active[type] ? active[type].call(this) : '';
+        });
+        document.onkeydown = function(){
+            if(window.event.keyCode == 13){
+                $('#search').click()
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="height:100%;margin: 0">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MySQL</title>
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+
+    <style>
+        #chart_map{
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body  style="height: 95%;calc(100% - 40px)">
+<!--main-->
+<div class="data_content" style="height: calc(100% - 30px);">
+    <div class="data_main">
+        <div class="main_left fl">
+            <div class="left_1" style="cursor: pointer;">
+                <!--左上边框-->
+                <div class="t_line_box">
+                    <i class="t_l_line"></i>
+                    <i class="l_t_line"></i>
+                </div>
+                <!--右上边框-->
+                <div class="t_line_box">
+                    <i class="t_r_line"></i>
+                    <i class="r_t_line"></i>
+                </div>
+                <!--左下边框-->
+                <div class="t_line_box">
+                    <i class="l_b_line"></i>
+                    <i class="b_l_line"></i>
+                </div>
+                <!--右下边框-->
+                <div class="t_line_box">
+                    <i class="r_b_line"></i>
+                    <i class="b_r_line"></i>
+                </div>
+                <div id="chart_1"  style="width:100%;height: 100%;"></div>
+            </div>
+            <div class="left_2 " style="cursor: pointer;">
+                <!--左上边框-->
+                <div class="t_line_box">
+                    <i class="t_l_line"></i>
+                    <i class="l_t_line"></i>
+                </div>
+                <!--右上边框-->
+                <div class="t_line_box">
+                    <i class="t_r_line"></i>
+                    <i class="r_t_line"></i>
+                </div>
+                <!--左下边框-->
+                <div class="t_line_box">
+                    <i class="l_b_line"></i>
+                    <i class="b_l_line"></i>
+                </div>
+                <!--右下边框-->
+                <div class="t_line_box">
+                    <i class="r_b_line"></i>
+                    <i class="b_r_line"></i>
+                </div>
+                <div id="chart_2" class="chart t_btn9" style="width:100%;height: 100%;"></div>
+            </div>
+        </div>
+        <div class="main_center fl">
+            <div class="center_text">
+                <!--左上边框-->
+                <div class="t_line_box">
+                    <i class="t_l_line"></i>
+                    <i class="l_t_line"></i>
+                </div>
+                <!--右上边框-->
+                <div class="t_line_box">
+                    <i class="t_r_line"></i>
+                    <i class="r_t_line"></i>
+                </div>
+                <!--左下边框-->
+                <div class="t_line_box">
+                    <i class="l_b_line"></i>
+                    <i class="b_l_line"></i>
+                </div>
+                <!--右下边框-->
+                <div class="t_line_box">
+                    <i class="r_b_line"></i>
+                    <i class="b_r_line"></i>
+                </div>
+                <div id="chart_map" style="width:100%;height: 100%"></div>
+            </div>
+        </div>
+        <div class="main_right fr">
+            <div class="right_1">
+                <!--左上边框-->
+                <div class="t_line_box">
+                    <i class="t_l_line"></i>
+                    <i class="l_t_line"></i>
+                </div>
+                <!--右上边框-->
+                <div class="t_line_box">
+                    <i class="t_r_line"></i>
+                    <i class="r_t_line"></i>
+                </div>
+                <!--左下边框-->
+                <div class="t_line_box">
+                    <i class="l_b_line"></i>
+                    <i class="b_l_line"></i>
+                </div>
+                <!--右下边框-->
+                <div class="t_line_box">
+                    <i class="r_b_line"></i>
+                    <i class="b_r_line"></i>
+                </div>
+                <div id="chart_3" style="width:100%;height: 100%;"></div>
+            </div>
+            <div class="right_2">
+                <!--左上边框-->
+                <div class="t_line_box">
+                    <i class="t_l_line"></i>
+                    <i class="l_t_line"></i>
+                </div>
+                <!--右上边框-->
+                <div class="t_line_box">
+                    <i class="t_r_line"></i>
+                    <i class="r_t_line"></i>
+                </div>
+                <!--左下边框-->
+                <div class="t_line_box">
+                    <i class="l_b_line"></i>
+                    <i class="b_l_line"></i>
+                </div>
+                <!--右下边框-->
+                <div class="t_line_box">
+                    <i class="r_b_line"></i>
+                    <i class="b_r_line"></i>
+                </div>
+                <div id="chart_4" style="width:100%;height: 100%;"></div>
+            </div>
+        </div>
+    </div>
+    <div class="data_bottom">
+        <div class="bottom_1 fl t_btn5" style="cursor: pointer;">
+            <!--左上边框-->
+            <div class="t_line_box">
+                <i class="t_l_line"></i>
+                <i class="l_t_line"></i>
+            </div>
+            <!--右上边框-->
+            <div class="t_line_box">
+                <i class="t_r_line"></i>
+                <i class="r_t_line"></i>
+            </div>
+            <!--左下边框-->
+            <div class="t_line_box">
+                <i class="l_b_line"></i>
+                <i class="b_l_line"></i>
+            </div>
+            <!--右下边框-->
+            <div class="t_line_box">
+                <i class="r_b_line"></i>
+                <i class="b_r_line"></i>
+            </div>
+            <div id="chart_5" class="echart fl" style="width:100%;height: 100%;">
+                <div class="main_table t_btn8">
+                    <table class="t_high">
+                        <tbody>
+                        {% for i in timeout%}
+                        <tr>
+                            <td>{{i.0}}</td>
+                            <td>{{i.1}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="bottom_center fl">
+            <div class="bottom_2 fl">
+                <!--左上边框-->
+                <div class="t_line_box">
+                    <i class="t_l_line"></i>
+                    <i class="l_t_line"></i>
+                </div>
+                <!--右上边框-->
+                <div class="t_line_box">
+                    <i class="t_r_line"></i>
+                    <i class="r_t_line"></i>
+                </div>
+                <!--左下边框-->
+                <div class="t_line_box">
+                    <i class="l_b_line"></i>
+                    <i class="b_l_line"></i>
+                </div>
+                <!--右下边框-->
+                <div class="t_line_box">
+                    <i class="r_b_line"></i>
+                    <i class="b_r_line"></i>
+                </div>
+                <div class="main_table t_btn8">
+                    <table class="t_high">
+                        <tbody>
+                        {% for o in open_count%}
+                        <tr>
+                            <td>{{o.0}}</td>
+                            <td>{{o.1}} 个</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bottom_3 fl">
+                <!--左上边框-->
+                <div class="t_line_box">
+                    <i class="t_l_line"></i>
+                    <i class="l_t_line"></i>
+                </div>
+                <!--右上边框-->
+                <div class="t_line_box">
+                    <i class="t_r_line"></i>
+                    <i class="r_t_line"></i>
+                </div>
+                <!--左下边框-->
+                <div class="t_line_box">
+                    <i class="l_b_line"></i>
+                    <i class="b_l_line"></i>
+                </div>
+                <!--右下边框-->
+                <div class="t_line_box">
+                    <i class="r_b_line"></i>
+                    <i class="b_r_line"></i>
+                </div>
+                <div class="main_table t_btn2">
+                    <table class="t_high">
+                        <tbody>
+                        {% for s in surface%}
+                        <tr>
+                            <td>{{s.0}}</td>
+                            <td>{{s.1}} 个</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="bottom_4 fr">
+            <!--左上边框-->
+            <div class="t_line_box">
+                <i class="t_l_line"></i>
+                <i class="l_t_line"></i>
+            </div>
+            <!--右上边框-->
+            <div class="t_line_box">
+                <i class="t_r_line"></i>
+                <i class="r_t_line"></i>
+            </div>
+            <!--左下边框-->
+            <div class="t_line_box">
+                <i class="l_b_line"></i>
+                <i class="b_l_line"></i>
+            </div>
+            <!--右下边框-->
+            <div class="t_line_box">
+                <i class="r_b_line"></i>
+                <i class="b_r_line"></i>
+            </div>
+            <!--<div class="main_title">-->
+            <!--<img src="/static/img/t_7.png" alt="">-->
+            <!--临时表-->
+            <!--</div>-->
+            <div class="main_table t_btn3">
+                <table class="t_high">
+                    <tbody>
+                    {% for sc in scan%}
+                    <tr>
+                        <td>{{sc.0}}</td>
+                        <td>{{sc.1}} 个</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/static/js/highcharts7.1.3.js"></script>
+<script src="/static/js/highcharts-more.js"></script>
+<script src="/static/js/solid-gauge.js"></script>
+<script src="/static/js/highcharts-zh_CN.js"></script>
+<script src="/static/js/jquery-3.3.1.min.js"></script>
+<script src="/static/js/jquery.cookie.js"></script>
+<script>
+    // 并发用户数
+    var num = 5;
+    var dic_base;
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }
+    });
+    function activeLastPointToolip(chart) {
+        chart.series[0].points;
+        // var points = chart.series[0].points;
+        // chart.tooltip.refresh(points[points.length -1]);
+    }
+
+    var chart = Highcharts.chart('chart_3', {
+        chart: {
+            type: 'spline',
+            marginRight: 10,
+            backgroundColor: 'rgba(0,0,0,0)',
+            events: {
+                load: function () {
+                    var chart = this;
+                    activeLastPointToolip(chart);
+                    setInterval(function () {
+                        $.ajax({
+                            url:'/mysql.html',
+                            type:'POST',
+                            data: {'key': 'Connect','count':num},
+                            headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                            success:function (base) {
+                                dic_base = $.parseJSON(base)
+                                var x = new Date(dic_base[0][0]['time']).getTime();
+                                chart.series[0].addPoint([x, dic_base[0][0]['count']], true, true);
+                                activeLastPointToolip(chart);
+                            }
+                        })
+                    }, num * 1000);
+                }
+            }
+        },
+        title: {
+            text: null,
+            style: {
+                color: '#ffffff',      //字体颜色
+                "fontSize": "20px",   //字体大小
+                fontWeight: 'bold',
+                border:'1px'
+            }
+        },
+        xAxis: {
+            type: 'datetime',
+            tickPixelInterval: 50,
+            labels:{
+                style:{
+                    color:'#fdfdfd'
+                }
+            },
+        },
+        yAxis: {
+            title: {
+                text: '数量(个)',
+                style:{
+                    color:'#fdfdfd'
+                }
+            },
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.series.name + '</b><br/>' +
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                    Highcharts.numberFormat(this.y, 1);
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -1,
+            y: 1,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor: 'rgba(0,0,0,0)',
+        },
+        series:{{connect_num|safe}}
+    });
+</script>
+<script>
+    Highcharts.chart('chart_1', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            backgroundColor: 'rgba(0,0,0,0)',
+            type: 'pie',
+            events: {
+                load: function () {
+                    var chart = this;
+                    setInterval(function () {
+                        if(dic_base){
+                            chart.update({
+                                series: [{
+                                    size:'100%',
+                                    name: 'Brands',
+                                    colorByPoint: true,
+                                    data: dic_base[3],
+                                }]
+                            });
+                        }
+                    },1000);
+                }
+            }
+        },
+        title: {
+            // text: 'SQL执行率',
+            text: null,
+            style: {
+                color: '#ffffff',      //字体颜色
+                "fontSize": "20px",   //字体大小
+                fontWeight: 'bold',
+                border:'1px'
+            }
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            size:'80%',
+            name: 'Brands',
+            colorByPoint: true,
+            data: {{base | safe}},
+    }]
+    });
+</script>
+<script>
+    Highcharts.chart('chart_2',{
+        chart: {
+            type: 'column',
+            backgroundColor: 'rgba(0,0,0,0)',
+            events: {
+                load: function () {
+                    var chart = this;
+                    setInterval(function () {
+                        if(dic_base){
+                            chart.update({
+                                series:dic_base[4]
+                            });
+                        }
+                    },1000);
+                }
+            }
+        },
+        title: {
+            text: null,
+            style: {
+                color: '#ffffff',      //字体颜色
+                "fontSize": "20px",   //字体大小
+                fontWeight: 'bold',
+                border:'1px'
+            }
+        },
+        xAxis: {
+            labels:{
+                enabled:false
+            }
+        },
+        yAxis: {
+            min: 0,
+            // max:100,
+            title: {
+                text: '数量(个)',
+                style:{
+                    color:'#fdfdfd'
+                }
+            },
+            labels:{
+                enabled:false
+            }
+        },
+        // tooltip: {
+        //     // head + 每个 point + footer 拼接成完整的 table
+        //     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        //     pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+        //         '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+        //     footerFormat: '</table>',
+        //     shared: true,
+        //     useHTML: true
+        // },
+        tooltip: {
+            headerFormat: null,
+            pointFormat: '<span style="font-size:12px">{series.name}</span>: <b>{point.y:.2f}</b><br/>'
+        },
+        plotOptions: {
+            column: {
+                borderWidth: 0,
+                dataLabels:{
+                    enabled:true
+                }
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -1,
+            y: 1,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor: 'rgba(0,0,0,0)',
+        },
+        series: {{sql_num|safe}}
+        //series: [{'showInLegend': true,'name': 'select', 'data': [6236], 'color': '#f15c80'}, {'showInLegend': false,'name': 'insert', 'data': [3673], 'color': '#f7a35c'}, {'showInLegend': false,'name': 'delete', 'data': [69], 'color': '#f15c80'}, {'showInLegend': false,'name': 'commit', 'data': [3741], 'color': '#8085e9'}]
+    });
+</script>
+<script>
+    Highcharts.chart('chart_4', {
+        chart: {
+            type: 'column',
+            backgroundColor: 'rgba(0,0,0,0)',
+            events: {
+                load: function () {
+                    var chart = this;
+                    setInterval(function () {
+                        if(dic_base){
+                            chart.update({
+                                series:[{
+                                    colorByPoint: true,
+                                    data: dic_base[1],
+                                }],
+                            });
+                        }
+                    },1000);
+                }
+            }
+        },
+        title: {
+            text: null
+        },
+        subtitle: {
+            text: null
+        },
+        xAxis: {
+            type: 'category',
+            labels:{
+                style:{
+                    color:'#fdfdfd'
+                }
+            },
+        },
+        yAxis: {
+            title: {
+                text: '百分比值：%',
+                style:{
+                    color:'#fdfdfd'
+                }
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y:.1f}'
+                }
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:12px">{point.name}</span><br>',
+            pointFormat: '<span style="font-size:12px">{point.name}</span>: <b>{point.y:.2f}</b><br/>'
+        },
+        series: [{
+            colorByPoint: true,
+            data: {{QT|safe}}
+    }],
+    });
+</script>
+<script>
+    Highcharts.chart('chart_map', {
+        chart: {
+            type: 'column',
+            backgroundColor: 'rgba(0,0,0,0)',
+            events: {
+                load: function () {
+                    var chart = this;
+                    setInterval(function () {
+                        if(dic_base){
+                            chart.update({
+                                series:[{
+                                    name: 'headerFormat',
+                                    colorByPoint: true,
+                                    data: dic_base[2]
+                                }],
+                            });
+                        }
+                    },1000);
+                }
+            }
+        },
+        title: {
+            text: null
+        },
+        subtitle: {
+            text: null
+        },
+        xAxis: {
+            type: 'category',
+            labels:{
+                style:{
+                    color:'#fdfdfd'
+                }
+            },
+        },
+        yAxis: {
+            title: {
+                text: '百分比值：%',
+                style:{
+                    color:'#fdfdfd'
+                }
+            },
+
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y:.1f}%'
+                }
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:12px">{point.name}</span><br>',
+            pointFormat: '<span style="font-size:12px">{point.name}</span>: <b>{point.y:.2f}%</b><br/>'
+        },
+        series: [{
+            name: 'headerFormat',
+            colorByPoint: true,
+            data: {{Percentage|safe}}
+    }],
+    });
+</script>
+</html>

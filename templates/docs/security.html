@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" style="height:98%;margin: 0">
+<head>
+    <meta charset="UTF-8">
+    <title>系统安全</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="/static/css/chart.css"/>
+</head>
+<body style="height:calc(100% - 40px)">
+<div class="security">
+    <div class="security_from">
+        <form class="security_div" method="post">
+            {% csrf_token %}
+            <div class="layui-inline">
+                <input id="search" class="layui-input" lay-verify="ip" name="search" autocomplete="off" placeholder="服务器IP地址" value={{ip}}>
+            </div>
+            <button id="scan" class="layui-btn" data-type="reload">开始扫描</button>
+        </form>
+    </div>
+    <div class="security_text" style="overflow-y:scroll;">
+        {% for values in security_base %}
+        <li style="font-size: 18px;margin-left: 5%;margin-top: 5px">{{values}}</li>
+        {% endfor %}
+    </div>
+    <div id="page" class="pagination"></div>
+</div>
+<script src="../../static/admin/js/layui.js" charset="utf-8"></script>
+<script src="../../static/js/jquery-3.3.1.min.js" charset="utf-8"></script>
+<script src="../../static/js/jquery.cookie.js"></script>
+<script>
+    $('#scan').click(function () {
+        layer.load(2, {shade: [0.1,'#fff']}); //0代表加载的风格，支持0-2
+    })
+</script>
+<script>
+    layui.use(['laypage', 'layer'], function(){
+        var laypage = layui.laypage
+
+        //完整功能
+        laypage.render({
+            elem: 'page'
+            ,count:'{{count|safe}}'
+            ,curr:'{{page_num|safe}}'
+            ,limit:'{{bg_hs|safe}}'
+            ,layout: [ 'prev', 'page', 'next', 'limit', 'refresh', 'skip','count']
+            ,jump: function(obj,first){
+                //首次不执行
+                if (!first) {
+                    var title = $('#page').val()
+                    var href = title
+                    href += '?page=' + obj.curr;
+                    href += '&limit=' + obj.limit;
+                    location.href = href;
+                }
+            }
+        });
+        document.onkeydown = function(){
+            if(window.event.keyCode == 13){
+                $('#scan').click()
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+需要安装以下插件：
+pip3 install cv2
+pip3 install psutil
+pip3 install requests
+pip3 install django
+pip3 install bs4
+pip3 install re
+pip3 install face_recognition
+
+
+注意：
+安装face_recognition时 需要先安装cmake和Microsoft Visual Studio,否则安装会报错
+先升级pip
+python -m pip install -U pip
+安装cmake命令如下：
+pip3 install cmake
+Microsoft Visual Studio需要手动安装
+
+
+系统最后更新日期：2020.10.12

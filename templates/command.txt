@@ -1,0 +1,14 @@
+python manage.py makemigrations
+
+python manage.py migrate
+
+
+#根据已有的数据库自动生成models文件
+python manage.py inspectdb  #根据数据库生成新的models
+
+#将生成的models保存为models.py文件
+python manage.py inspectdb > models.py
+
+
+#打包命令
+python setup.py sdist --formats=gztar,zip

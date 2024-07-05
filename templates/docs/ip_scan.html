@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" style="height:98%;margin: 0">
+<head>
+    <meta charset="UTF-8">
+    <title>系统安全</title>
+    <link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/chart.css"/>
+    <style>
+        .div_table{
+            width: 100%;
+        }
+    </style>
+</head>
+<body style="height:97%">
+<div class="security layui-form">
+    <div class="security_from layui-form">
+        <form class="security_div" method="post">
+            {% csrf_token %}
+            <div class="layui-inline">
+                <input id="search" class="layui-input" lay-verify="ip" name="ip" autocomplete="off" placeholder="起始IP地址"  >
+            </div>
+            <button id="scan" class="layui-btn" data-type="reload">开始扫描</button>
+        </form>
+    </div>
+    <div class="security_text" style="overflow-y:scroll;">
+        <div class="scan_div_one">
+            <table class="tb table div_table table-bordered table-hover" lay-filter="demo">
+                <thead>
+                <tr>
+                    <th class="u1 scan_th_one" >IP地址</th>
+                    <th class="u1 scan_th_two" >扫描结果</th>
+                    <th class="u1 scan_th_two" >操作</th>
+                </tr>
+                </thead>
+                <tbody class="layui-table">
+                {% for i in result%}
+                <tr>
+                    <td class="scan_td">{{ i.0}}</td>
+                    <td class="scan_td">{{i.1}}</td>
+                    <!--<td style="display: none">{{i.2}}</td>-->
+                    <td >{{i.2}}</td>
+                    <td style="text-align:center;">
+                        <a class="layui-btn layui-btn-xs edit" lay-event="edit">查看</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div id="text" class="scan_div_two"></div>
+    </div>
+    <div id="page" class="pagination"></div>
+</div>
+<script src="/static/layui/layui.js" charset="utf-8"></script>
+<script src="/static/js/jquery-3.3.1.min.js" charset="utf-8"></script>
+<script>
+    // 编辑功能
+    $('.edit').click(function (){
+        var values = $(this).parent().parent().children('td').eq(2).html()
+        $('#text').html(values)
+        // layui.use('element', function() {
+        var element = layui.element;
+        element.init("div");
+        // });
+    })
+</script>
+<!--<script>-->
+<!--$('#scan').click(function () {-->
+<!--layer.load(2, {shade: [0.1,'#fff']}); //0代表加载的风格，支持0-2-->
+<!--})-->
+<!--</script>-->
+<script>
+    layui.use(['laypage', 'layer'], function(){
+        var laypage = layui.laypage
+
+        //完整功能
+        laypage.render({
+            elem: 'page'
+            ,count:'{{count|safe}}'
+            ,curr:'{{page_num|safe}}'
+            ,limit:'{{bg_hs|safe}}'
+            ,layout: [ 'prev', 'page', 'next', 'limit', 'refresh', 'skip','count']
+            ,jump: function(obj,first){
+                //首次不执行
+                if (!first) {
+                    var title = $('#page').val()
+                    var href = title
+                    href += '?page=' + obj.curr;
+                    href += '&limit=' + obj.limit;
+                    location.href = href;
+                }
+            }
+        });
+    });
+</script>
+<script>
+    layui.use(['form'], function() {
+        var form = layui.form;
+        form.verify({
+            ip: [/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
+                ,'IP地址不符合规则'],
+        });
+
+    });
+    document.onkeydown = function(){
+        if(window.event.keyCode == 13){
+            $('#scan').click()
+        }
+    }
+</script>
+</body>
+</html>

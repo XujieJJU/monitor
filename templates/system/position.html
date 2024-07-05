@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en"style="height: 100%;">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/admin/layui/css/layui.css" media="all">
+</head>
+<body style="height: calc(100% - 10px);">
+<div class="posit_d1">
+    <div style="width:calc(20% - 30px);float: left;">
+        <div class="layui-table-tool" style="width:100%;padding-bottom: 0px;padding-top: 10px;">
+            <button id="add" type="button" class="layui-btn layui-btn-sm layui-hide"><i class="layui-icon"></i></button>
+            <button id="edit" type="button" class="layui-btn layui-btn-sm layui-hide"><i class="layui-icon"></i></button>
+            <button id="del" type="button" class="layui-btn layui-btn-sm layui-hide"><i class="layui-icon"></i></button>
+        </div>
+        <div id="tree" class="demo-tree-more posit_tree"></div>
+    </div>
+    <div style="width:80%;float: right;">
+        <table class="layui-hide" id="user" lay-filter="user" ></table>
+        <script type="text/html" id="toolbar">
+            <div class="layui-inline">
+                <input class="layui-input" id="input" autocomplete="off" placeholder="姓名/账号">
+            </div>
+            <button class="layui-btn" id = "search" data-type = "reload">查询</button>
+        </script>
+    </div>
+</div>
+</body>
+</html>
+<script src="/static/admin/js/layui.js" charset="utf-8"></script>
+<script src="/static/js/jquery-3.3.1.min.js" charset="utf-8"></script>
+<script src="/static/js/jquery.cookie.js" charset="utf-8"></script>
+<script>
+    layui.use(['tree', 'table','util'], function(){
+        var table = layui.table
+            ,tree = layui.tree
+            ,util = layui.util
+
+        //权限设置
+        tree.render({
+            elem: '#tree'
+            , data: {{ data | safe }}
+    , showCheckbox: false  //是否显示复选框
+            ,customOperate: true
+            ,onlyIconControl: true
+            ,click: function(obj){
+            data_tree = obj.data; //当前节点的数据
+            var values =$("#input").val();
+            var index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+            $('#add').removeClass('layui-hide')
+            $('#edit').removeClass(' layui-hide')
+            $('#del').removeClass(' layui-hide')
+            table.reload('Reload',
+                {page:
+                        {
+                            curr: 1 //重新从第 1 页开始
+                        }
+                    ,where: {org_id:data_tree.id}//这里传参  向后台
+                });
+            $("#input").attr("value", values);
+            layer.close(index);
+        }
+    , id: 'org_Id'
+    });
+
+        $('#add').click(function () {
+            layer.open({
+                type: 2 //Page层类型
+                ,area: ['60%', '80%']
+                ,title: '新增部门'
+                ,shade: 0.6 //遮罩透明度
+                ,anim: 4 //0-6的动画形式，-1不开启
+                ,content:['org_add.html/'] + "?org_id=" + data_tree.id
+            })
+        });
+
+        $('#edit').click(function () {
+            layer.open({
+                type: 2 //Page层类型
+                ,area: ['60%', '80%']
+                ,title: '编辑部门信息'
+                ,shade: 0.6 //遮罩透明度
+                ,anim: 4 //0-6的动画形式，-1不开启
+                ,content:['org_edit.html/'] + "?org_id=" + data_tree.id
+            })
+        });
+
+        $('#del').click(function () {
+            layer.confirm('你确定要删除当前数据？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                $.ajax({
+                    url: 'org_del.html',
+                    type: 'POST',
+                    data:{'key': 'delete','base':data_tree.id},
+                    headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                    success: function (base) {
+                        if (base == 'true'){
+                            layer.msg('删除部门成功！', {icon: 1});
+                            setTimeout("window.location.reload();", 2000 )
+                        }else {
+                            layer.msg('请先删除当前节点下的所有子节点！', {icon: 2});
+                        }
+                    }
+                })
+            });
+        })
+
+        table.render({
+            elem: '#user',
+            height: 'full-30',
+            toolbar: '#toolbar',
+            cellMinWidth: 80
+            ,url:'org_data.html'
+            ,title: '用户数据表'
+            ,cols: [[
+                {field:'order', title:'序号',align:'center', width:'10%',fixed: 'left', unresize: true, sort: true,}
+                ,{field:'name', title:'用户名', width:'10%'}
+                ,{field:'account', title:'账号', width:'10%'}
+                ,{field:'gender', title:'性别', width:'10%',sort: true}
+                ,{field:'tell', title:'电话', width:'10%'}
+                ,{field:'email', title:'邮箱', width:'15%', sort: true}
+                ,{field:'level', title:'账户类型', width:'10%', sort: true}
+                ,{field:'address', title:'地址'}
+            ]]
+            ,page: true
+            ,id:'Reload'
+        })
+            , active = {
+            reload:function(){
+                var $ = layui.$
+                var values =$("#input").val();
+                var index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+                table.reload('Reload',
+                    {page:
+                            {
+                                curr: 1 //重新从第 1 页开始
+                            }
+                        ,where: {serch_key:values}//这里传参  向后台
+                    });
+                $("#input").attr("value", values);
+                layer.close(index);
+            }
+        };
+        $('body').on('click','#search', function(){
+            var type = 'reload';
+            active[type] ? active[type].call(this) : '';
+        });
+        document.onkeydown = function(){
+            if(window.event.keyCode == 13){
+                $('#search').click()
+            }
+        }
+    })
+</script>
